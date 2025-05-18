@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pickle
 import numpy as np
@@ -67,16 +68,14 @@ if st.button('💰 Predict Price'):
     Y_res = int(resolution.split('x')[1])
     ppi = ((X_res ** 2) + (Y_res ** 2)) ** 0.5 / screen_size
 
-    # Build query input
-    query = pd.DataFrame([[
-        company, type_, ram, memory, weight,
-        touchscreen_val, ips_val, ppi, cpu, gpu, os
-    ]], columns=df.drop('Price', axis=1).columns)  # Assuming df includes all input columns
+    # Build query input as DataFrame
+    query = pd.DataFrame([[company, type_, ram, memory, weight,
+                           touchscreen_val, ips_val, ppi, cpu, gpu, os]],
+                         columns=['Company', 'TypeName', 'Ram', 'Memory', 'Weight',
+                                  'Touchscreen', 'IPS', 'ppi', 'cpu_brand', 'Gpu_brand', 'Os'])
 
-    try:
-        prediction = np.exp(Pipe.predict(query)[0])
-        st.success(f"💸 Predicted Laptop Price: ₹ {int(prediction)}")
-    except Exception as e:
-        st.error(f"❌ Prediction failed: {e}")
+    # Make prediction
+    predicted_price = np.exp(Pipe.predict(query)[0])
 
-        
+    # Show result
+    st.title("💸 The predicted price of this configuration is ₹{:,.0f}".format(predicted_price))

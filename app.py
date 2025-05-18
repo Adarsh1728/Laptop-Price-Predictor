@@ -46,7 +46,7 @@ if st.button('💰 Predict Price'):
     ppi = ((X_res ** 2) + (Y_res ** 2)) ** 0.5 / screen_size
 
     # Build input DataFrame with correct column names
-    query = pd.DataFrame([[company, type_, ram, memory, weight,
+    query = pd.array([[company, type_, ram, memory, weight,
                            touchscreen_val, ips_val, ppi, cpu, gpu, os]],
                          columns=['Company', 'TypeName', 'Ram', 'Memory', 'Weight',
                                   'Touchscreen', 'Ips', 'Ppi', 'cpu_brand', 'Gpu_brand', 'Os'])

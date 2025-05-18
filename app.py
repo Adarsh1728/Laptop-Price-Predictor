@@ -5,14 +5,14 @@ import pandas as pd
 import os
 
 # Load model and data
-if os.path.exists("Pipe.pkl"):
+if os.path.exists("pipe.pkl"):
     try:
-        Pipe = pickle.load(open("Pipe.pkl", "rb"))
+        Pipe = pickle.load(open("pipe.pkl", "rb"))
         print("✅ Model loaded successfully!")
     except Exception as e:
         print(f"❌ Error loading model: {e}")
 else:
-    print("❌ Pipe.pkl not found.")
+    print("❌ pipe.pkl not found.")
 
 df = pickle.load(open("df.pkl", "rb"))
 
@@ -46,10 +46,11 @@ if st.button('💰 Predict Price'):
     ppi = ((X_res ** 2) + (Y_res ** 2)) ** 0.5 / screen_size
 
     # Build input DataFrame with correct column names
-    query = pd.DataFrame([[
-        company, type_, ram, memory, weight,
-        touchscreen_val, ips_val, ppi, cpu, gpu, os
-    ]], columns=df.drop('Price', axis=1).columns)
+    query = pd.DataFrame([[  
+    company, type_, ram, memory, weight,  
+    touchscreen_val, ips_val, ppi, cpu, gpu, os  
+]], columns=df.columns)
+
 
     # Debug: show input and dtypes
     st.write("Input DataFrame:")

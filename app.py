@@ -6,17 +6,14 @@ import pandas as pd
 import os
 
 # Load model and data
-Pipe = None  # Initialize as None
-
 if os.path.exists("pipe.pkl"):
     try:
         Pipe = pickle.load(open("pipe.pkl", "rb"))
         print("✅ Model loaded successfully!")
     except Exception as e:
-        st.error(f"❌ Error loading model: {e}")
+        print(f"❌ Error loading model: {e}")
 else:
-    st.error("❌ pipe.pkl not found.")
-
+    print("❌ pipe.pkl not found.")
 df = pickle.load(open("df.pkl", "rb"))
 
 st.title("💻 Laptop Price Predictor")
@@ -61,26 +58,24 @@ gpu = st.selectbox('GPU Brand', df['Gpu_brand'].unique())
 os = st.selectbox('Operating System', df['Os'].unique())
 
 if st.button('💰 Predict Price'):
-    if Pipe is None:
-        st.error("🚫 Model not loaded. Cannot make predictions.")
-    else:
-        # Convert touchscreen and ips to 0/1
-        touchscreen_val = 1 if touchscreen == 'Yes' else 0
-        ips_val = 1 if ips == 'Yes' else 0
 
-        # Calculate PPI
-        X_res = int(resolution.split('x')[0])
-        Y_res = int(resolution.split('x')[1])
-        ppi = ((X_res ** 2) + (Y_res ** 2)) ** 0.5 / screen_size
+    # Convert touchscreen and ips to 0/1
+    touchscreen_val = 1 if touchscreen == 'Yes' else 0
+    ips_val = 1 if ips == 'Yes' else 0
 
-        # Build input DataFrame
-        query = pd.DataFrame([[company, type_, ram, memory, weight,
-                               touchscreen_val, ips_val, ppi, cpu, gpu, os]],
-                             columns=['Company', 'TypeName', 'Ram', 'Memory', 'Weight',
-                                      'Touchscreen', 'IPS', 'ppi', 'cpu_brand', 'Gpu_brand', 'Os'])
+    # Calculate PPI
+    X_res = int(resolution.split('x')[0])
+    Y_res = int(resolution.split('x')[1])
+    ppi = ((X_res ** 2) + (Y_res ** 2)) ** 0.5 / screen_size
 
-        try:
-            predicted_price = np.exp(Pipe.predict(query)[0])
-            st.title("💸 The predicted price of this configuration is ₹{:,.0f}".format(predicted_price))
-        except Exception as e:
-            st.error(f"⚠️ Prediction failed: {e}")
+    # Build query input as DataFrame
+    query = pd.DataFrame([[company, type_, ram, memory, weight,
+                           touchscreen_val, ips_val, ppi, cpu, gpu, os]],
+                         columns=['Company', 'TypeName', 'Ram', 'Memory', 'Weight',
+                                  'Touchscreen', 'IPS', 'ppi', 'cpu_brand', 'Gpu_brand', 'Os'])
+
+    # Make prediction
+    predicted_price = np.exp(Pipe.predict(query)[0])
+
+    # Show result
+    st.title("💸 The predicted price of this configuration is ₹{:,.0f}".format(predicted_price))

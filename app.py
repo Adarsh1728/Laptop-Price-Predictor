@@ -7,7 +7,7 @@ import os
 # Load model and data
 if os.path.exists("pipe.pkl"):
     try:
-        Pipe = pickle.load(open("pipe.pkl", "rb"))
+        Pipe = pickle.load(open("Pipe.pkl", "rb"))
         print("✅ Model loaded successfully!")
     except Exception as e:
         print(f"❌ Error loading model: {e}")

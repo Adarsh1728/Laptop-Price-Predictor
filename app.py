@@ -74,8 +74,5 @@ if st.button('💰 Predict Price'):
                          columns=['Company', 'TypeName', 'Ram', 'Memory', 'Weight',
                                   'Touchscreen', 'IPS', 'ppi', 'cpu_brand', 'Gpu_brand', 'Os'])
 
-    # Make prediction
-    predicted_price = np.exp(Pipe.predict(query)[0])
-
     # Show result
-    st.title("💸 The predicted price of this configuration is ₹{:,.0f}".format(predicted_price))
+    st.title("The predicted price of this configuration is " + str(int(np.exp(Pipe.predict(query)[0]))))
